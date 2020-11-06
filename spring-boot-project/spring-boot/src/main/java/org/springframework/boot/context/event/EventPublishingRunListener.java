@@ -56,6 +56,8 @@ import org.springframework.util.ErrorHandler;
  */
 public class EventPublishingRunListener implements SpringApplicationRunListener, Ordered {
 
+	private static Log logger = LogFactory.getLog(EventPublishingRunListener.class);
+
 	private final SpringApplication application;
 
 	private final String[] args;
@@ -64,6 +66,8 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 	private final SimpleApplicationEventMulticaster initialMulticaster;
 
 	public EventPublishingRunListener(SpringApplication application, String[] args) {
+		logger.info("EventPublishingRunListener.........");
+
 		this.application = application;
 		this.args = args;
 		this.initialMulticaster = new SimpleApplicationEventMulticaster();
@@ -81,18 +85,24 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 
 	@Override
 	public void starting() {
+		logger.info("EventPublishingRunListener starting.........");
+
 		this.initialMulticaster.multicastEvent(
 				new ApplicationStartingEvent(this.application, this.args));
 	}
 
 	@Override
 	public void environmentPrepared(ConfigurableEnvironment environment) {
+		logger.info("EventPublishingRunListener environmentPrepared.........");
+
 		this.initialMulticaster.multicastEvent(new ApplicationEnvironmentPreparedEvent(
 				this.application, this.args, environment));
 	}
 
 	@Override
 	public void contextPrepared(ConfigurableApplicationContext context) {
+		logger.info("EventPublishingRunListener contextPrepared.........");
+
 		this.initialMulticaster.multicastEvent(new ApplicationContextInitializedEvent(
 				this.application, this.args, context));
 	}
@@ -105,6 +115,8 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 	// 这是因为只有到了contextLoaded方法之后，上下文才算初始化完成，才可通过它的publishEvent方法来进行事件的发布。
 	@Override
 	public void contextLoaded(ConfigurableApplicationContext context) {
+		logger.info("EventPublishingRunListener contextLoaded.........");
+
 		for (ApplicationListener<?> listener : this.application.getListeners()) {
 			if (listener instanceof ApplicationContextAware) {
 				((ApplicationContextAware) listener).setApplicationContext(context);
@@ -117,12 +129,16 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 
 	@Override
 	public void started(ConfigurableApplicationContext context) {
+		logger.info("EventPublishingRunListener started.........");
+
 		context.publishEvent(
 				new ApplicationStartedEvent(this.application, this.args, context));
 	}
 
 	@Override
 	public void running(ConfigurableApplicationContext context) {
+		logger.info("EventPublishingRunListener running.........");
+
 		context.publishEvent(
 				new ApplicationReadyEvent(this.application, this.args, context));
 	}
