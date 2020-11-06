@@ -38,7 +38,7 @@ class SpringBootBanner implements Banner {
 			"  '  |____| .__|_| |_|_| |_\\__, | / / / /",
 			" =========|_|==============|___/=/_/_/_/" };
 
-	private static final String SPRING_BOOT = " :: Spring Boot :: ";
+	private static final String SPRING_BOOT = " :: Baoge - Spring Boot-2.1.3 :: ";
 
 	private static final int STRAP_LINE_SIZE = 42;
 
