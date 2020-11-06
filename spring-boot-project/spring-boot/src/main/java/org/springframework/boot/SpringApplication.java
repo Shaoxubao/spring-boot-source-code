@@ -432,10 +432,12 @@ public class SpringApplication {
 
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type,
 			Class<?>[] parameterTypes, Object... args) {
-		ClassLoader classLoader = getClassLoader();
+		ClassLoader classLoader = getClassLoader(); // 获得类加载器
+		// 加载META-INF/spring.factories中对应监听器的配置，并将结果存于set中
 		// Use names and ensure unique to protect against duplicates
 		Set<String> names = new LinkedHashSet<>(
 				SpringFactoriesLoader.loadFactoryNames(type, classLoader));
+		// 实例化监听器
 		List<T> instances = createSpringFactoriesInstances(type, parameterTypes,
 				classLoader, args, names);
 		AnnotationAwareOrderComparator.sort(instances);
