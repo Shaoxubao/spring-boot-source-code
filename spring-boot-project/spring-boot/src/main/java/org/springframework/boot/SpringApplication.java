@@ -293,33 +293,42 @@ public class SpringApplication {
 	 * @return a running {@link ApplicationContext}
 	 */
 	public ConfigurableApplicationContext run(String... args) {
-		StopWatch stopWatch = new StopWatch();
+		StopWatch stopWatch = new StopWatch(); // 用于统计run方法启动时长
 		stopWatch.start();
 		ConfigurableApplicationContext context = null;
 		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
 		configureHeadlessProperty();
+		// 1、获取监听器
 		SpringApplicationRunListeners listeners = getRunListeners(args);
+		// 2、启动监听器
 		listeners.starting();
 		try {
+			// 3、初始化参数配置
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(
 					args);
+			// 加载属性配置，包括所有的属性配置(如:application.properties中和外部的属性配置)
 			ConfigurableEnvironment environment = prepareEnvironment(listeners,
 					applicationArguments);
 			configureIgnoreBeanInfo(environment);
+			// 4、打印Banner信息
 			Banner printedBanner = printBanner(environment);
+			// 5、创建容器
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(
 					SpringBootExceptionReporter.class,
-					new Class[] { ConfigurableApplicationContext.class }, context);
+					new Class[] { ConfigurableApplicationContext.class }, context); // 异常报告器
+			// 6、准备容器，组件对象之间进行关联
 			prepareContext(context, environment, listeners, applicationArguments,
 					printedBanner);
+			// 7、初始化容器
 			refreshContext(context);
-			afterRefresh(context, applicationArguments);
+			afterRefresh(context, applicationArguments); // 初始化操作之后执行，默认实现为空
 			stopWatch.stop();
 			if (this.logStartupInfo) {
 				new StartupInfoLogger(this.mainApplicationClass)
 						.logStarted(getApplicationLog(), stopWatch);
 			}
+			// 8、通知监听器：容器启动完成
 			listeners.started(context);
 			callRunners(context, applicationArguments);
 		}
@@ -329,6 +338,7 @@ public class SpringApplication {
 		}
 
 		try {
+			// 9、通知监听器：容器正在运行
 			listeners.running(context);
 		}
 		catch (Throwable ex) {
