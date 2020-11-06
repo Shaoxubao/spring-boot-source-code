@@ -37,6 +37,7 @@ public interface SpringApplicationRunListener {
 	/**
 	 * Called immediately when the run method has first started. Can be used for very
 	 * early initialization.
+	 * 当run方法被第一次执行时，会被立即调用，可用于非常早期的初始化工作
 	 */
 	void starting();
 
@@ -44,6 +45,8 @@ public interface SpringApplicationRunListener {
 	 * Called once the environment has been prepared, but before the
 	 * {@link ApplicationContext} has been created.
 	 * @param environment the environment
+	 *
+	 * 当environment准备完成，在ApplicationContext创建之前，该方法被调用
 	 */
 	void environmentPrepared(ConfigurableEnvironment environment);
 
@@ -51,6 +54,7 @@ public interface SpringApplicationRunListener {
 	 * Called once the {@link ApplicationContext} has been created and prepared, but
 	 * before sources have been loaded.
 	 * @param context the application context
+	 * 当ApplicationContext构建完成，资源还未被加载时，该方法被调用
 	 */
 	void contextPrepared(ConfigurableApplicationContext context);
 
@@ -58,6 +62,7 @@ public interface SpringApplicationRunListener {
 	 * Called once the application context has been loaded but before it has been
 	 * refreshed.
 	 * @param context the application context
+	 * 当ApplicationContext加载完成，未被刷新之前，该方法被调用
 	 */
 	void contextLoaded(ConfigurableApplicationContext context);
 
@@ -67,6 +72,8 @@ public interface SpringApplicationRunListener {
 	 * ApplicationRunners} have not been called.
 	 * @param context the application context.
 	 * @since 2.0.0
+	 * 当ApplicationContext刷新并启动之后，CommandLineRunner和ApplicationRunner未被调用之前，
+	 * 该方法被调用
 	 */
 	void started(ConfigurableApplicationContext context);
 
@@ -76,6 +83,7 @@ public interface SpringApplicationRunListener {
 	 * {@link ApplicationRunner ApplicationRunners} have been called.
 	 * @param context the application context.
 	 * @since 2.0.0
+	 * 当所有工作准备就绪，run方法执行完成之前，该方法被调用
 	 */
 	void running(ConfigurableApplicationContext context);
 
@@ -85,6 +93,7 @@ public interface SpringApplicationRunListener {
 	 * the context was created
 	 * @param exception the failure
 	 * @since 2.0.0
+	 * 当程序出现错误时，该方法被调用
 	 */
 	void failed(ConfigurableApplicationContext context, Throwable exception);
 
